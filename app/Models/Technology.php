@@ -10,4 +10,9 @@ class Technology extends Model
     use HasFactory;
 
     public $timestamps = false;
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
 }
