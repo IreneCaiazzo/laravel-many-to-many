@@ -33,6 +33,7 @@
                 <th scope="col">Title</th>
                 <th scope="col">Type</th>
                 <th scope="col">Description</th>
+                <th scope="col">Technologies</th>
                 <th scope="col">Repo</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -44,6 +45,7 @@
                     <td>{{ $project->title }}</td>
                     <td><a href="{{route('admin.types.show', ['type' => $project->type])}}">{{ $project->type->name }}</a></td>
                     <td>{{ $project->description }}</td>
+                    <td>{{ implode(', ', $project->technologies->pluck('name')->all()) }}</td>
                     <td>{{ $project->repo }}</td>
 
                     <td>

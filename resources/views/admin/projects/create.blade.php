@@ -53,6 +53,28 @@
         </div>
 
         <div class="mb-3">
+            <h3>Technologies</h3>
+            @foreach($technologies as $technology)
+                <div class="mb-3 form-check">
+                    <input 
+                    type="checkbox" 
+                    class="form-check-input"
+                    id="technology{{ $technology->id }}" 
+                    name="technologies[]" 
+                    value="{{ $technology->id }}" 
+                    @if (in_array($technology->id, old('technologies') ?: []))checked @endif
+                >
+                    <label class="form-check-label" for="technology{{ $technology->id }}">{{ $technology->name }}</label>
+                </div>
+            @endforeach
+            {{-- @error('type_id')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror --}}
+        </div>
+
+        <div class="mb-3">
             <label for="description" class="form-label">Description</label>
             <input
                 type="text"

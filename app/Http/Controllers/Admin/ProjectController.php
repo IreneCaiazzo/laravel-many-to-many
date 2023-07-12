@@ -4,16 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Type;
 use App\Models\Project;
+use App\Models\Technology;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class ProjectController extends Controller
 {
     private $validations = [
-        'title'       => 'required|string|min:5|max:100',
-        'type_id'     => 'required|integer|exists:types,id',
-        'description' => 'required|string',
-        'repo'        => 'required|string|min:5|max:100',
+        'title'          => 'required|string|min:5|max:100',
+        'type_id'        => 'required|integer|exists:types,id',
+        'description'    => 'required|string',
+        'repo'           => 'required|string|min:5|max:100',
+        'technologies'   => 'nullable|array',
+        'technologies.*' => 'integer|exists:technologies,id',
     ];
 
     private $validation_messages = [
@@ -42,9 +45,10 @@ class ProjectController extends Controller
     public function create()
     {
         //richiesta al db per estrarre tutte le categorie
-        $types = Type::all();
+        $types        = Type::all();
+        $technologies = Technology::all();
 
-        return view('admin.projects.create', compact('types'));
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     /**
@@ -70,6 +74,10 @@ class ProjectController extends Controller
 
         $newProject->save();
 
+        //associare le technologies
+
+        $newProject->technologies()->sync($data['technologies'] ?? []);
+
         //redirezionare su una rotta di tipo get
         return to_route('admin.projects.show', ['project' => $newProject]);
     }
@@ -93,8 +101,10 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        $types = Type::all();
-        return view('admin.projects.edit', compact('project', 'types'));
+        $types        = Type::all();
+        $technologies = Technology::all();
+
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -120,6 +130,10 @@ class ProjectController extends Controller
 
         $project->update();
 
+        //associare le technologies
+
+        $project->technologies()->sync($data['technologies'] ?? []);
+
         //redirezionare su una rotta di tipo get
         return to_route('admin.projects.show', ['project' => $project]);
     }
@@ -132,6 +146,12 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        //disassociare tutte le technologies dal project
+        $project->technologies()->detach();
+        // same as: $project->technologies()->sync([]);
+
+        //eliminare il project
+
         $project->delete();
 
         return to_route('admin.projects.index')->with('delete_success', $project);
