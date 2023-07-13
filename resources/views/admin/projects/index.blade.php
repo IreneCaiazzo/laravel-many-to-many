@@ -4,6 +4,10 @@
 
     <h1>Projects</h1>
 
+    @foreach ($projects as $project)
+        <img src="{{ asset('storage/' . $project->image) }}" alt="">
+    @endforeach
+
     @if (session('delete_success'))
         @php $project = session('delete_success') @endphp
         <div class="alert alert-danger">
@@ -43,6 +47,7 @@
                 <tr>
                     <th scope="row">{{ $project->id }}</th>
                     <td>{{ $project->title }}</td>
+                    <td><img src="{{ asset('storage/' . $project->image) }}" alt=""></td>
                     <td><a href="{{route('admin.types.show', ['type' => $project->type])}}">{{ $project->type->name }}</a></td>
                     <td>{{ $project->description }}</td>
                     <td>{{ implode(', ', $project->technologies->pluck('name')->all()) }}</td>

@@ -7,12 +7,14 @@ use App\Models\Project;
 use App\Models\Technology;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
     private $validations = [
         'title'          => 'required|string|min:5|max:100',
         'type_id'        => 'required|integer|exists:types,id',
+        'image'          => 'nullable|image|max:1024',
         'description'    => 'required|string',
         'repo'           => 'required|string|min:5|max:100',
         'technologies'   => 'nullable|array',
@@ -22,7 +24,7 @@ class ProjectController extends Controller
     private $validation_messages = [
         'required' => 'Il campo :attribute è obbligatorio',
         'min' => 'Il campo :attribute deve avere almeno :min caratteri',
-        'max' => 'Il campo :attribute non può superare i :max caratteri',
+        //'max' => 'Il campo :attribute non può superare i :max caratteri',
         'exists' => 'Valore non valido',
     ];
 
@@ -64,11 +66,16 @@ class ProjectController extends Controller
 
         $data = $request->all();
 
-        //salvare dati in db se validi
+        //salvare l'img nella cartella degli uploads
+        //prendere il percorso dell'img appena salvata
+        $imagePath = Storage::put('uploads', $data['image']);
+
+        //salvare dati in db se validi insieme al percorso dell'img
         $newProject = new Project();
 
         $newProject->title = $data['title'];
         $newProject->type_id = $data['type_id'];
+        $newProject->image = $imagePath;
         $newProject->description = $data['description'];
         $newProject->repo = $data['repo'];
 
@@ -120,6 +127,19 @@ class ProjectController extends Controller
         $request->validate($this->validations, $this->validation_messages);
 
         $data = $request->all();
+
+        if ($data['image']) {
+            //salvare l'eventuale img nuova
+            $imagePath = Storage::put('uploads', $data['image']);
+
+            //se c'è l'img nuova eliminare l'img vecchia
+            if ($project->image) {
+                Storage::delete($project->image);
+            }
+
+            //aggiorno il valore nella colonna con l'indirizzo dell'img nuova se presente
+            $project->image = $imagePath;
+        }
 
         //aggiornare dati in db se validi
 
