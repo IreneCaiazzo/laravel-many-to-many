@@ -5,17 +5,18 @@
     <h1>Add new post</h1>
 
     {{-- @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif --}}
 
-    <form method="POST" action="{{ route('admin.projects.store', ['project' => $project]) }}" enctype="multipart/form-data" novalidate>
+    <form method="POST" action="{{ route('admin.projects.update', ['project' => $project]) }}" enctype="multipart/form-data" novalidate>
         @csrf
+        @method('put')
 
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
@@ -80,11 +81,13 @@
                     <label class="form-check-label" for="technology{{ $technology->id }}">{{ $technology->name }}</label>
                 </div>
             @endforeach
-            {{-- @error('type_id')
+
+             {{-- @error('type_id')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>
             @enderror --}}
+         
         </div>
 
         <div class="mb-3">
@@ -109,7 +112,7 @@
                 class="form-control @error('repo') is-invalid @enderror"
                 id="repo"
                 rows="3"
-                name="repo">{{ old('repo') }}</textarea>
+                name="repo">{{ old('repo', $project->repo) }}</textarea>
             @error('repo')
                 <div class="invalid-feedback">
                     {{ $message }}
