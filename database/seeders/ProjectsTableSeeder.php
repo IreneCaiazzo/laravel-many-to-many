@@ -28,7 +28,7 @@ class ProjectsTableSeeder extends Seeder
 
                 'type_id' => $faker->randomElement($types)->id,
                 'title' => $faker->words(rand(2, 10), true),
-                'description' => $faker->paragraphs(rand(2, 20), true),
+                'description' => $faker->paragraphs(rand(2, 5), true),
                 'repo' => $faker->words(rand(2, 10), true),
 
             ]);
