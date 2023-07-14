@@ -4,10 +4,6 @@
 
     <h1>Projects</h1>
 
-    @foreach ($projects as $project)
-        <img src="{{ asset('storage/' . $project->image) }}" alt="">
-    @endforeach
-
     @if (session('delete_success'))
         @php $project = session('delete_success') @endphp
         <div class="alert alert-danger">
