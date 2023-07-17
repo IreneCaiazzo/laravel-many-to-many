@@ -2,19 +2,19 @@
 
 @section('contents')
 
-    <h1>Types</h1>
+    <h1>Technologies</h1>
 
     @if (session('delete_success'))
-        @php $type = session('delete_success') @endphp
+        @php $technology = session('delete_success') @endphp
         <div class="alert alert-danger">
-            the type "{{ $type->titolo }}" has been deleted
+            the technology "{{ $technology->titolo }}" has been deleted
         </div>
     @endif
 
     {{-- @if (session('restore_success'))
-        @php $type = session('restore_success') @endphp
+        @php $technology = session('restore_success') @endphp
         <div class="alert alert-success">
-            La type "{{ $type->titolo }}" è stata ripristinata
+            La technology "{{ $technology->titolo }}" è stata ripristinata
         </div>
     @endif --}}
 
@@ -28,21 +28,21 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($types as $type)
+            @foreach ($technologies as $technology)
                 <tr>
-                    <th scope="row">{{ $type->id }}</th>
-                    <td>{{ $type->name }}</td>
-                    <td>{{ count($type->projects) }}</td>
+                    <th scope="row">{{ $technology->id }}</th>
+                    <td>{{ $technology->name }}</td>
+                    <td>{{ count($technology->projects) }}</td>
 
                     <td>
-                        <a class="btn btn-primary" href="{{ route('admin.types.show', ['type' => $type]) }}">View</a>
-                        <a class="btn btn-warning" href="{{ route('admin.types.edit', ['type' => $type]) }}">Edit</a>
+                        <a class="btn btn-primary" href="{{ route('admin.technologies.show', ['technology' => $technology]) }}">View</a>
+                        <a class="btn btn-warning" href="{{ route('admin.technologies.edit', ['technology' => $technology]) }}">Edit</a>
                         <button 
-                            type="button" 
+                            technology="button" 
                             class="btn btn-danger js-delete" 
                             data-bs-toggle="modal" 
                             data-bs-target="#deleteModal" 
-                            data-id="{{ $type->id}}"
+                            data-id="{{ $technology->id}}"
                         >
                         Delete
                         </button>
@@ -58,7 +58,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="deleteModalLabel">Delete confirmation</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button technology="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
@@ -66,11 +66,11 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button technology="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                     
                     <form
                         action=""
-                        data-template="{{ route('admin.types.destroy', ['type' => '*****']) }}"
+                        data-template="{{ route('admin.technologies.destroy', ['technology' => '*****']) }}"
                         method="post"
                         class="d-inline-block"
                         id="confirm-delete"

@@ -46,13 +46,26 @@
                     <td><img src="{{ asset('storage/' . $project->image) }}" alt=""></td>
                     <td><a href="{{route('admin.types.show', ['type' => $project->type])}}">{{ $project->type->name }}</a></td>
                     <td>{{ $project->description }}</td>
-                    <td>{{ implode(', ', $project->technologies->pluck('name')->all()) }}</td>
+                    {{-- <td>{{ implode(', ', $project->technologies->pluck('name')->all()) }}</td> --}}
+                    <td>
+                        @foreach ($project->technologies as $technology)
+                            <a href="{{route('admin.technologies.show', ['technology' => $technology])}}">{{ $technology->name }}</a>
+                             {{ !$loop->last ? ', ' : ''}}
+                        @endforeach    
+                    </td>
+
                     <td>{{ $project->repo }}</td>
 
                     <td>
                         <a class="btn btn-primary" href="{{ route('admin.projects.show', ['project' => $project]) }}">View</a>
                         <a class="btn btn-warning" href="{{ route('admin.projects.edit', ['project' => $project]) }}">Edit</a>
-                        <button type="button" class="btn btn-danger js-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="{{ $project->id}}">
+                        <button 
+                            type="button" 
+                            class="btn btn-danger js-delete" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#deleteModal" 
+                            data-id="{{ $project->slug}}"
+                        >
                         Delete
                         </button>
 

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\TypeController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\TechnologyController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Guest\PageController as GuestPageController;
 
@@ -27,7 +28,9 @@ Route::middleware('auth', 'verified')
     ->group(function () {
         Route::get('/', [AdminPageController::class, 'dashboard'])->name('dashboard');
         Route::resource('projects', ProjectController::class);
+        Route::get('/projects/prova/{id}', [ProjectController::class, 'prova'])->name('prova');
         Route::resource('types', TypeController::class);
+        Route::resource('technologies', TechnologyController::class);
     });
 
 

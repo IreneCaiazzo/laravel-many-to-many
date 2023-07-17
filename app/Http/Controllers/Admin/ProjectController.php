@@ -74,6 +74,7 @@ class ProjectController extends Controller
         $newProject = new Project();
 
         $newProject->title = $data['title'];
+        $newProject->slug = Project::slugger($data['title']);
         $newProject->type_id = $data['type_id'];
         $newProject->image = $imagePath;
         $newProject->description = $data['description'];
@@ -95,8 +96,9 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function show(Project $project)
+    public function show($slug)
     {
+        $project = Project::where('slug', $slug)->firstOrFail();
         return view('admin.projects.show', compact('project'));
     }
 
@@ -106,8 +108,10 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function edit(Project $project)
+    public function edit($slug)
     {
+        $project = Project::where('slug', $slug)->firstOrFail();
+
         $types        = Type::all();
         $technologies = Technology::all();
 
@@ -121,8 +125,10 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+    public function update(Request $request, $slug)
     {
+        $project = Project::where('slug', $slug)->firstOrFail();
+
         //validare dati del form
         $request->validate($this->validations, $this->validation_messages);
 
@@ -164,8 +170,10 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project $project)
+    public function destroy($slug)
     {
+
+        $project = Project::where('slug', $slug)->firstOrFail();
 
         if ($project->image) {
             Storage::delete($project->image);
@@ -180,5 +188,11 @@ class ProjectController extends Controller
         $project->delete();
 
         return to_route('admin.projects.index')->with('delete_success', $project);
+    }
+
+    public function prova($slug)
+    {
+        $project = Project::where('slug', $slug)->firstOrFail();
+        return $project->title;
     }
 }
