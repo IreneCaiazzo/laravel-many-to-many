@@ -28,7 +28,7 @@ Route::middleware('auth', 'verified')
     ->group(function () {
         Route::get('/', [AdminPageController::class, 'dashboard'])->name('dashboard');
         Route::resource('projects', ProjectController::class);
-        Route::get('/projects/prova/{id}', [ProjectController::class, 'prova'])->name('prova');
+        Route::get('/projects/prova/{project}', [ProjectController::class, 'prova'])->name('projects.prova');
         Route::resource('types', TypeController::class);
         Route::resource('technologies', TechnologyController::class);
     });

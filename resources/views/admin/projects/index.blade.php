@@ -57,6 +57,7 @@
                     <td>{{ $project->repo }}</td>
 
                     <td>
+                        <a href="{{route('admin.projects.prova', ['project' => $project])}}">al link di prova</a>
                         <a class="btn btn-primary" href="{{ route('admin.projects.show', ['project' => $project]) }}">View</a>
                         <a class="btn btn-warning" href="{{ route('admin.projects.edit', ['project' => $project]) }}">Edit</a>
                         <button 

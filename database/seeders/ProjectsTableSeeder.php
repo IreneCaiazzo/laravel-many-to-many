@@ -23,19 +23,12 @@ class ProjectsTableSeeder extends Seeder
         $types = Type::all();
         $types->shift();
 
-        $technologies = Technology::all()->pluck('id');
+        $technologies = Technology::all()->pluck('id')->all();
 
         for ($i = 0; $i < 50; $i++) {
 
             $title = $faker->words(rand(2, 10), true);
-            // $slug = Project::slugger($title);
-
-            $slug = '';
-
-            // Generare uno slug valido, non vuoto
-            while (empty($slug)) {
-                $slug = Project::slugger($title);
-            }
+            $slug = Project::slugger($title);
 
             $project = Project::create([
 
@@ -49,9 +42,7 @@ class ProjectsTableSeeder extends Seeder
 
             //associare projects alle technologies
 
-            // $project->technologies()->sync(["1", "2", "3", "4", "5", "6", "7"]);
-            $randomTechnologies = $technologies->random(rand(1, 5))->pluck('id')->toArray();
-            $project->technologies()->sync($randomTechnologies);
+            $project->technologies()->sync($faker->randomElements($technologies, null));
         }
     }
 }
