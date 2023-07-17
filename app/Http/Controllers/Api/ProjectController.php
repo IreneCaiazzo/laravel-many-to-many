@@ -12,7 +12,7 @@ class ProjectController extends Controller
     public function index()
     {
         //chiamata al db
-        $projects = Project::paginate(5);
+        $projects = Project::with('type', 'technologies')->paginate(5);
 
         //il metodo json ci dà come risposta json e non html
         return response()->json($projects);
